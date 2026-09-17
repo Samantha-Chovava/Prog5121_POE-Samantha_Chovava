@@ -45,9 +45,4 @@ public class Login {
         }
         return hasCapitalLetter && hasNumber && hasSpecialCharacter;
     }
-        // Check if the cellphone number is correctly formatted
-    public boolean checkCellPhoneNumber(String cellPhoneNumber) {
-        return cellPhoneNumber != null
-                && cellPhoneNumber.matches("^\\+27\\d{9}$");
-    }
 }
