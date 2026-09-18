@@ -1,114 +1,57 @@
-#### **ST10505448 Chat Application**
+# PROG5121 POE – Part 1
 
+**Student Name:** Samantha Chovava
+**Student Number:** ST10505448
+**Module:** PROG5121
+**Part:** Part 1 – Registration and Login Feature
 
+## About the Project
 
-**Student Name**: Samantha Chovava
+This project is a Java chat application developed as part of my PROG5121 Programming course. Part 1 focuses on creating the registration and login feature for the chat application.
 
-**Student Number**: ST10505448
+## Part 1 Features
 
-**Module**: PROG5121
+The application allows a user to:
 
-**Part**: Part 1 - Registration and Login Feature
+* Enter their first name and surname.
+* Register a username.
+* Register a password.
+* Enter a cellphone number.
+* Check that the username contains an underscore and is no more than five characters long.
+* Check that the password has at least eight characters, a capital letter, a number, and a special character.
+* Check that the cellphone number is correctly formatted using the South African international code.
+* Log in using the registered username and password.
+* Receive a message showing whether the login was successful or unsuccessful.
 
+## Unit Testing
 
+JUnit 5 was used to test the Part 1 features.
 
-**About the Project**
+The tests check:
 
+* Username validation
+* Password complexity
+* Cellphone number validation
+* User registration
+* Successful login
+* Unsuccessful login
 
+There are **6 unit tests**, and all 6 tests passed successfully.
 
-This project is a Java chat application for my PROG5121 module. For Part 1 I had to make the registration and login feature.
+## How to Run the Application
 
+1. Open the project in NetBeans.
+2. Run the `Registration` class.
+3. Enter the registration details when prompted.
+4. Enter the login details when prompted.
+5. The application will display whether the login was successful.
 
+## Files
 
-**Part 1 Features**
+* `Registration.java` – Contains the main program and user interaction.
+* `Login.java` – Contains the registration, validation, and login methods.
+* `TestUnits.java` – Contains the JUnit 5 unit tests.
 
+## Part 1 Status
 
-
-This application allows the user to:
-
-
-
-\- Enter their first name and surname.
-
-\- Register a username.
-
-\- Register a password.
-
-\- Enter a cellphone number.
-
-\- Check if the username has an underscore and is not more than five characters.
-
-\- Check if the password has at least eight characters, a capital letter, a number and a special character.
-
-\- Check if the cellphone number is in the correct format with the South African international code.
-
-\- Login with the registered username and password.
-
-\- Get a message that says if the login was successful or not.
-
-
-
-**Unit Testing**
-
-
-
-I used JUnit 5 to test Part 1.
-
-
-
-**The tests check:**
-
-
-
-\- Username validation
-
-\- Password complexity
-
-\- Cellphone number validation
-
-\- User registration
-
-\- Successful login
-
-\- Unsuccessful login
-
-
-
-There are 6 unit tests and all 6 tests passed.
-
-
-
-**How to Run the Application**
-
-
-
-1\. Open the project in NetBeans.
-
-2\. Run the ST10505448ChatApplication class.
-
-3\. Enter the registration details.
-
-4\. Enter the login details.
-
-5\. The application will show if the login was successful.
-
-
-
-**Files**
-
-
-
-\- ST10505448ChatApplication.java - This has the main program and where the user enters their details.
-
-\- Login.java - This has the methods for registration, validation and login.
-
-\- LoginTest.java - This has the JUnit 5 tests.
-
-
-
-**Part 1 Status**
-
-
-
-Part 1 is finished. The registration, validation, login and unit tests are all done and working.
-
+Part 1 registration, validation, login functionality, and unit testing have been completed.
