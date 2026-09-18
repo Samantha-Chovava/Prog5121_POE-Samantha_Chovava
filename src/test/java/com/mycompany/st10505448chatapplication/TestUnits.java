@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author User
  */
-public class LoginTest {
+public class TestUnits {
     
-    public LoginTest() {
+    public TestUnits() {
     }
     
     @BeforeAll

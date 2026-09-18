@@ -10,7 +10,7 @@ import java.util.Scanner;
  *
  * @author User
  */
-public class ST10505448ChatApplication {
+public class Registration {
 
     public static void main(String[] args) {
         // Scanner
