@@ -46,14 +46,15 @@ public class Message {
         return messageID != null && messageID.length() <= 10;
     }
 
-    public String checkRecipientCell() {
-        if (recipient != null
-                && recipient.matches("^\\+\\d{1,11}$")) {
-            return "Cell phone number successfully captured.";
-        }
-
-        return "Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.";
+public String checkRecipientCell() {
+    if (recipient != null
+            && recipient.matches("^\\+[1-9]\\d{7,10}$")) {
+        return "Cell phone number successfully captured.";
     }
+
+    return "Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.";
+}
+
 
     public String checkMessageLength() {
         if (messageText == null) {
@@ -70,20 +71,21 @@ public class Message {
                 + "; please reduce the size.";
     }
 
-    public String createMessageHash() {
-        if (messageText == null || messageText.trim().isEmpty()) {
-            return messageID.substring(0, 2) + ":"
-                    + messageNumber + ":";
-        }
-
-        String[] words = messageText.trim().split("\\s+");
-        String firstWord = words[0];
-        String lastWord = words[words.length - 1];
-
-        return (messageID.substring(0, 2) + ":"
-                + messageNumber + ":"
-                + firstWord + lastWord).toUpperCase();
+public String createMessageHash() {
+    if (messageText == null || messageText.trim().isEmpty()) {
+        return messageID.substring(0, 2) + ":"
+                + messageNumber + ":";
     }
+
+    String[] words = messageText.trim().split("\\s+");
+
+    String firstWord = words[0].replaceAll("[^a-zA-Z0-9]", "");
+    String lastWord = words[words.length - 1].replaceAll("[^a-zA-Z0-9]", "");
+
+    return (messageID.substring(0, 2) + ":"
+            + messageNumber + ":"
+            + firstWord + lastWord).toUpperCase();
+}
 
     public String SentMessage() {
         Scanner input = new Scanner(System.in);
