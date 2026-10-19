@@ -1,0 +1,30 @@
+name: Java Maven Tests
+
+on:
+push:
+branches:
+- Part2_Messaging
+pull_request:
+branches:
+- Part2_Messaging
+workflow_dispatch:
+
+jobs:
+build-and-test:
+runs-on: ubuntu-latest
+
+```
+steps:
+  - name: Check out repository
+    uses: actions/checkout@v4
+
+  - name: Set up Java
+    uses: actions/setup-java@v4
+    with:
+      distribution: temurin
+      java-version: '26'
+      cache: maven
+
+  - name: Build project and run tests
+    run: mvn --batch-mode clean verify
+
