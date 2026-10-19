@@ -5,7 +5,6 @@
 package com.mycompany.st10505448chatapplication;
 
 import java.util.Random;
-import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -87,7 +86,7 @@ public String createMessageHash() {
             + firstWord + lastWord).toUpperCase();
 }
 
-    public String SentMessage(String choice) {
+public String SentMessage(String choice) {
     switch (choice) {
         case "1":
             messageStatus = "Sent";
@@ -113,25 +112,57 @@ public String createMessageHash() {
     }
 }
 
-    public boolean storeMessage() {
-        try (FileWriter writer = new FileWriter("messages.json", true)) {
-            String jsonMessage = "{"
-                    + "\"messageID\":\"" + escapeJson(messageID) + "\","
-                    + "\"messageNumber\":" + messageNumber + ","
-                    + "\"recipient\":\"" + escapeJson(recipient) + "\","
-                    + "\"messageText\":\"" + escapeJson(messageText) + "\","
-                    + "\"messageHash\":\"" + escapeJson(messageHash) + "\","
-                    + "\"messageStatus\":\"Stored\""
-                    + "}\n";
+public boolean storeMessage() {
+    String jsonMessage = "{"
+            + "\"messageID\":\"" + escapeJson(messageID) + "\","
+            + "\"messageNumber\":" + messageNumber + ","
+            + "\"recipient\":\"" + escapeJson(recipient) + "\","
+            + "\"messageText\":\"" + escapeJson(messageText) + "\","
+            + "\"messageHash\":\"" + escapeJson(messageHash) + "\","
+            + "\"messageStatus\":\"Stored\""
+            + "}";
 
-            writer.write(jsonMessage);
-            return true;
+    java.io.File file = new java.io.File("messages.json");
+    String existingContent = "";
 
-        } catch (IOException e) {
-            System.out.println("Error storing message: " + e.getMessage());
-            return false;
+    try {
+        if (file.exists() && file.length() > 0) {
+            existingContent = java.nio.file.Files.readString(file.toPath()).trim();
+
+            // Start a new JSON array if the old file uses the previous format
+            if (!existingContent.startsWith("[")
+                    || !existingContent.endsWith("]")) {
+                existingContent = "";
+            }
         }
+
+        String newContent;
+
+        if (existingContent.isEmpty()) {
+            newContent = "[\n" + jsonMessage + "\n]";
+        } else {
+            String contentWithoutEnd = existingContent.substring(
+                    0, existingContent.length() - 1
+            ).trim();
+
+            if (contentWithoutEnd.endsWith("[")) {
+                newContent = contentWithoutEnd + "\n" + jsonMessage + "\n]";
+            } else {
+                newContent = contentWithoutEnd + ",\n" + jsonMessage + "\n]";
+            }
+        }
+
+        try (FileWriter writer = new FileWriter(file, false)) {
+            writer.write(newContent);
+        }
+
+        return true;
+
+    } catch (IOException e) {
+        System.out.println("Error storing message: " + e.getMessage());
+        return false;
     }
+}
 
     private String escapeJson(String value) {
         if (value == null) {
