@@ -1,105 +1,140 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
- */
 package com.mycompany.st10505448chatapplication;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- *
- * @author User
- */
 public class TestUnits {
-    
-    public TestUnits() {
-    }
-    
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
-    @BeforeEach
-    public void setUp() {
-    }
-    
-    @AfterEach
-    public void tearDown() {
-    }
-
-        @Test
-    public void testCheckUserName() {
-        Login login = new Login();
-
-        assertTrue(login.checkUserName("sam_"));
-        assertFalse(login.checkUserName("samantha"));
-    }
 
     @Test
-    public void testCheckPasswordComplexity() {
-        Login login = new Login();
-
-        assertTrue(login.checkPasswordComplexity("Password1!"));
-        assertFalse(login.checkPasswordComplexity("password"));
-    }
-
-    @Test
-    public void testCheckCellPhoneNumber() {
-        Login login = new Login();
-
-        assertTrue(login.checkCellPhoneNumber("+27821234567"));
-        assertFalse(login.checkCellPhoneNumber("0821234567"));
-    }
-
-    @Test
-    public void testRegisterUser() {
-        Login login = new Login(
-                "Samantha",
-                "Chovava",
-                "sam_",
-                "Password1!",
-                "+27821234567"
+    public void testMessageID() {
+        Message message = new Message(
+                "+27718693002",
+                "Hi Mike, can you join us for dinner tonight?",
+                0
         );
 
-        assertEquals("User registered successfully.", login.registerUser());
+        assertTrue(message.checkMessageID());
+        assertEquals(10, message.getMessageID().length());
+        assertTrue(message.getMessageID().matches("\\d{10}"));
     }
 
     @Test
-    public void testLoginUser() {
-        Login login = new Login(
-                "Samantha",
-                "Chovava",
-                "sam_",
-                "Password1!",
-                "+27821234567"
+    public void testValidRecipientCell() {
+        Message message = new Message(
+                "+27718693002",
+                "Hello",
+                0
         );
 
-        login.setLoginDetails("sam_", "Password1!");
-
-        assertTrue(login.loginUser());
+        assertEquals(
+                "Cell phone number successfully captured.",
+                message.checkRecipientCell()
+        );
     }
 
     @Test
-    public void testLoginUserIncorrectDetails() {
-        Login login = new Login(
-                "Samantha",
-                "Chovava",
-                "sam_",
-                "Password1!",
-                "+27821234567"
+    public void testInvalidRecipientCell() {
+        Message message = new Message(
+                "08575975889",
+                "Hello",
+                0
         );
 
-        login.setLoginDetails("wrong_", "wrongPassword");
+        assertEquals(
+                "Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.",
+                message.checkRecipientCell()
+        );
+    }
 
-        assertFalse(login.loginUser());
+    @Test
+    public void testMessageLengthSuccess() {
+        Message message = new Message(
+                "+27718693002",
+                "Hello, how are you?",
+                0
+        );
+
+        assertEquals(
+                "Message ready to send.",
+                message.checkMessageLength()
+        );
+    }
+
+    @Test
+    public void testMessageLengthFailure() {
+        String longMessage = "A".repeat(251);
+
+        Message message = new Message(
+                "+27718693002",
+                longMessage,
+                0
+        );
+
+        assertEquals(
+                "Message exceeds 250 characters by 1; please reduce the size.",
+                message.checkMessageLength()
+        );
+    }
+
+    @Test
+    public void testMessageHash() {
+        Message message = new Message(
+                "+27718693002",
+                "Hi Mike, can you join us for dinner tonight?",
+                0
+        );
+
+        String expectedHash = message.getMessageID().substring(0, 2)
+                + ":0:HITONIGHT";
+
+        assertEquals(expectedHash, message.createMessageHash());
+    }
+
+    @Test
+    public void testSendMessage() {
+        Message message = new Message(
+                "+27718693002",
+                "Hello",
+                0
+        );
+
+        assertEquals(
+                "Message successfully sent.",
+                message.SentMessage("1")
+        );
+
+        assertEquals("Sent", message.getMessageStatus());
+    }
+
+    @Test
+    public void testDisregardMessage() {
+        Message message = new Message(
+                "+27718693002",
+                "Hello",
+                0
+        );
+
+        assertEquals(
+                "Press 0 to delete the message.",
+                message.SentMessage("2")
+        );
+
+        assertEquals("Disregarded", message.getMessageStatus());
+    }
+
+    @Test
+    public void testStoreMessage() {
+        Message message = new Message(
+                "+27718693002",
+                "Hello",
+                0
+        );
+
+        assertEquals(
+                "Message successfully stored.",
+                message.SentMessage("3")
+        );
+
+        assertEquals("Stored", message.getMessageStatus());
     }
 }

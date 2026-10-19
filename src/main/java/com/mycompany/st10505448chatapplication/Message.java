@@ -87,40 +87,31 @@ public String createMessageHash() {
             + firstWord + lastWord).toUpperCase();
 }
 
-    public String SentMessage() {
-        Scanner input = new Scanner(System.in);
+    public String SentMessage(String choice) {
+    switch (choice) {
+        case "1":
+            messageStatus = "Sent";
+            messagesSent++;
+            System.out.println("Message successfully sent.");
+            return "Message successfully sent.";
 
-        System.out.println("Choose an option:");
-        System.out.println("1. Send Message");
-        System.out.println("2. Disregard Message");
-        System.out.println("3. Store Message to send later");
+        case "2":
+            messageStatus = "Disregarded";
+            System.out.println("Press 0 to delete the message.");
+            return "Press 0 to delete the message.";
 
-        String choice = input.nextLine();
+        case "3":
+            if (storeMessage()) {
+                messageStatus = "Stored";
+                System.out.println("Message successfully stored.");
+                return "Message successfully stored.";
+            }
+            return "Message could not be stored.";
 
-        switch (choice) {
-            case "1":
-                messageStatus = "Sent";
-                messagesSent++;
-                System.out.println("Message successfully sent.");
-                return "Message successfully sent.";
-
-            case "2":
-                messageStatus = "Disregarded";
-                System.out.println("Press 0 to delete the message.");
-                return "Press 0 to delete the message.";
-
-            case "3":
-                if (storeMessage()) {
-                    messageStatus = "Stored";
-                    System.out.println("Message successfully stored.");
-                    return "Message successfully stored.";
-                }
-                return "Message could not be stored.";
-
-            default:
-                return "Invalid option selected.";
-        }
+        default:
+            return "Invalid option selected.";
     }
+}
 
     public boolean storeMessage() {
         try (FileWriter writer = new FileWriter("messages.json", true)) {
