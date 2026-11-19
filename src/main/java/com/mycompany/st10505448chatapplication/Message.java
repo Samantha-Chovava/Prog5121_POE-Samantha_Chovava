@@ -5,8 +5,6 @@
 package com.mycompany.st10505448chatapplication;
 
 import java.util.Random;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class Message {
 
@@ -20,6 +18,8 @@ public class Message {
     private static int totalMessages = 0;
     private static int messagesSent = 0;
 
+    public Message() {
+  }
     public Message(String recipient, String messageText, int messageNumber) {
         this.messageID = generateMessageID();
         this.recipient = recipient;
@@ -98,82 +98,16 @@ public String SentMessage(String choice) {
             messageStatus = "Disregarded";
             System.out.println("Press 0 to delete the message.");
             return "Press 0 to delete the message.";
-
+        
         case "3":
-            if (storeMessage()) {
-                messageStatus = "Stored";
-                System.out.println("Message successfully stored.");
-                return "Message successfully stored.";
-            }
-            return "Message could not be stored.";
+            messageStatus = "Stored";
+            System.out.println("Message successfully stored.");
+            return "Message successfully stored.";
 
         default:
             return "Invalid option selected.";
     }
 }
-
-public boolean storeMessage() {
-    String jsonMessage = "{"
-            + "\"messageID\":\"" + escapeJson(messageID) + "\","
-            + "\"messageNumber\":" + messageNumber + ","
-            + "\"recipient\":\"" + escapeJson(recipient) + "\","
-            + "\"messageText\":\"" + escapeJson(messageText) + "\","
-            + "\"messageHash\":\"" + escapeJson(messageHash) + "\","
-            + "\"messageStatus\":\"Stored\""
-            + "}";
-
-    java.io.File file = new java.io.File("messages.json");
-    String existingContent = "";
-
-    try {
-        if (file.exists() && file.length() > 0) {
-            existingContent = java.nio.file.Files.readString(file.toPath()).trim();
-
-            // Start a new JSON array if the old file uses the previous format
-            if (!existingContent.startsWith("[")
-                    || !existingContent.endsWith("]")) {
-                existingContent = "";
-            }
-        }
-
-        String newContent;
-
-        if (existingContent.isEmpty()) {
-            newContent = "[\n" + jsonMessage + "\n]";
-        } else {
-            String contentWithoutEnd = existingContent.substring(
-                    0, existingContent.length() - 1
-            ).trim();
-
-            if (contentWithoutEnd.endsWith("[")) {
-                newContent = contentWithoutEnd + "\n" + jsonMessage + "\n]";
-            } else {
-                newContent = contentWithoutEnd + ",\n" + jsonMessage + "\n]";
-            }
-        }
-
-        try (FileWriter writer = new FileWriter(file, false)) {
-            writer.write(newContent);
-        }
-
-        return true;
-
-    } catch (IOException e) {
-        System.out.println("Error storing message: " + e.getMessage());
-        return false;
-    }
-}
-
-    private String escapeJson(String value) {
-        if (value == null) {
-            return "";
-        }
-
-        return value.replace("\\", "\\\\")
-                .replace("\"", "\\\"")
-                .replace("\n", "\\n")
-                .replace("\r", "\\r");
-    }
 
     public String printMessages() {
         return "Message ID: " + messageID

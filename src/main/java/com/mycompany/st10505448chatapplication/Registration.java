@@ -87,6 +87,7 @@ public class Registration {
 
         System.out.println();
         System.out.println("Welcome to QuickChat.");
+        MessageManagement messageManagement = new MessageManagement();
 
         int messageLimit;
 
@@ -120,7 +121,8 @@ public class Registration {
             System.out.println("Please select an option:");
             System.out.println("1) Send Messages");
             System.out.println("2) Show recently sent messages");
-            System.out.println("3) Quit");
+            System.out.println("3) Stored Messages");
+            System.out.println("4) Quit");
 
             String choice = input.nextLine();
 
@@ -214,6 +216,8 @@ public class Registration {
                         System.out.println(
                                 message.SentMessage(messageChoice)
                         );
+                        
+                        messageManagement.addMessage(message);
 
                         // Display the message details
                         System.out.println();
@@ -239,7 +243,98 @@ public class Registration {
                     System.out.println("Coming Soon.");
                     break;
 
-                case "3":
+               case "3":
+
+    boolean returnToMainMenu = false;
+
+    while (!returnToMainMenu) {
+
+        System.out.println("\n--- STORED MESSAGES ---");
+        System.out.println("1) Display all stored messages");
+        System.out.println("2) Display the longest message");
+        System.out.println("3) Search for a message by ID");
+        System.out.println("4) Search for messages by recipient");
+        System.out.println("5) Delete a message using its hash");
+        System.out.println("6) Display full message report");
+        System.out.println("7) Return to main menu");
+
+        String storedChoice = input.nextLine();
+
+        switch (storedChoice) {
+
+            case "1":
+                for (Message message : messageManagement.getStoredMessages()) {
+                    System.out.println(message.printMessages());
+                    System.out.println();
+                }
+                break;
+
+            case "2":
+                Message longest = messageManagement.getLongestStoredMessage();
+
+                if (longest != null) {
+                    System.out.println(longest.printMessages());
+                } else {
+                    System.out.println("No stored messages found.");
+                }
+                break;
+
+            case "3":
+                System.out.print("Enter message ID: ");
+                String searchID = input.nextLine();
+
+                Message found = messageManagement.searchMessageByID(searchID);
+
+                if (found != null) {
+                    System.out.println(found.printMessages());
+                } else {
+                    System.out.println("Message not found.");
+                }
+                break;
+
+            case "4":
+                System.out.print("Enter recipient cellphone number: ");
+                String searchRecipient = input.nextLine();
+
+                var results = messageManagement.searchMessagesByRecipient(searchRecipient);
+
+                if (results.isEmpty()) {
+                    System.out.println("No messages found for this recipient.");
+                } else {
+                    for (Message message : results) {
+                        System.out.println(message.printMessages());
+                        System.out.println();
+                    }
+                }
+                break;
+
+            case "5":
+                System.out.print("Enter message hash: ");
+                String deleteHash = input.nextLine();
+
+                if (messageManagement.deleteMessageByHash(deleteHash)) {
+                    System.out.println("Message successfully deleted.");
+                } else {
+                    System.out.println("Message not found.");
+                }
+                break;
+
+            case "6":
+                System.out.println(messageManagement.generateReport());
+                break;
+
+            case "7":
+                returnToMainMenu = true;
+                break;
+
+            default:
+                System.out.println("Invalid option. Please try again.");
+        }
+    }
+
+    break;  
+                    
+                case "4":
                     if (!totalDisplayed) {
                         System.out.println(
                                 "Total messages sent: "
