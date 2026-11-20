@@ -2,7 +2,7 @@
 
 **Student Name:** Samantha Chovava  
 **Student Number:** ST10505448  
-**Module:** PROG5121  
+**Module:** PROG5121
 
 ## About the Project
 This project is a Java chat application developed as part of my PROG5121 Programming course. It includes user registration and login, messaging features, message validation, message hashes, stored message management using JSON, and automated JUnit 5 unit tests.
@@ -71,3 +71,6 @@ JUnit 5 is used to automate testing across Parts 1, 2, and 3 (`TestUnits.java`):
 * `messages.json` – Stores persisted messages saved by the application.
 * `pom.xml` – Maven project configuration and Gson/JUnit dependencies.
 * `.github/workflows/maven-tests.yml` – Automated builds and tests via GitHub Actions.
+
+## Project Status
+Part 1 covers registration, validation, and login functionality. Part 2 adds messaging features, message validation, and message hashes. Part 3 extends the application with stored message management, JSON file handling, searching, deletion, and message reporting.
