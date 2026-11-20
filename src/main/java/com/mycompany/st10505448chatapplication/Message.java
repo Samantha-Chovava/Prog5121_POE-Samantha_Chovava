@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.st10505448chatapplication;
 
 import java.util.Random;
@@ -10,6 +6,7 @@ public class Message {
 
     private String messageID;
     private int messageNumber;
+    private String sender;
     private String recipient;
     private String messageText;
     private String messageHash;
@@ -19,9 +16,15 @@ public class Message {
     private static int messagesSent = 0;
 
     public Message() {
-  }
+    }
+
     public Message(String recipient, String messageText, int messageNumber) {
+        this("Developer", recipient, messageText, messageNumber);
+    }
+
+    public Message(String sender, String recipient, String messageText, int messageNumber) {
         this.messageID = generateMessageID();
+        this.sender = (sender == null || sender.isBlank()) ? "Developer" : sender;
         this.recipient = recipient;
         this.messageText = messageText;
         this.messageNumber = messageNumber;
@@ -45,16 +48,14 @@ public class Message {
         return messageID != null && messageID.length() <= 10;
     }
 
-public String checkRecipientCell() {
-    if (recipient != null
-            && recipient.matches("^\\+[1-9]\\d{7,10}$")) {
-        return "Cell phone number successfully captured.";
+    public String checkRecipientCell() {
+        if (recipient != null && recipient.matches("^\\+[1-9]\\d{7,10}$")) {
+            return "Cell phone number successfully captured.";
+        }
+
+        return "Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.";
     }
-
-    return "Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.";
-}
-
-
+    
     public String checkMessageLength() {
         if (messageText == null) {
             return "Please enter a message.";
@@ -70,48 +71,49 @@ public String checkRecipientCell() {
                 + "; please reduce the size.";
     }
 
-public String createMessageHash() {
-    if (messageText == null || messageText.trim().isEmpty()) {
-        return messageID.substring(0, 2) + ":"
-                + messageNumber + ":";
+    public String createMessageHash() {
+        if (messageText == null || messageText.trim().isEmpty()) {
+            return messageID.substring(0, 2) + ":"
+                    + messageNumber + ":";
+        }
+
+        String[] words = messageText.trim().split("\\s+");
+
+        String firstWord = words[0].replaceAll("[^a-zA-Z0-9]", "");
+        String lastWord = words[words.length - 1].replaceAll("[^a-zA-Z0-9]", "");
+
+        return (messageID.substring(0, 2) + ":"
+                + messageNumber + ":"
+                + firstWord + lastWord).toUpperCase();
     }
 
-    String[] words = messageText.trim().split("\\s+");
+    public String SentMessage(String choice) {
+        switch (choice) {
+            case "1":
+                messageStatus = "Sent";
+                messagesSent++;
+                System.out.println("Message successfully sent.");
+                return "Message successfully sent.";
 
-    String firstWord = words[0].replaceAll("[^a-zA-Z0-9]", "");
-    String lastWord = words[words.length - 1].replaceAll("[^a-zA-Z0-9]", "");
+            case "2":
+                messageStatus = "Disregarded";
+                System.out.println("Press 0 to delete the message.");
+                return "Press 0 to delete the message.";
 
-    return (messageID.substring(0, 2) + ":"
-            + messageNumber + ":"
-            + firstWord + lastWord).toUpperCase();
-}
+            case "3":
+                messageStatus = "Stored";
+                System.out.println("Message successfully stored.");
+                return "Message successfully stored.";
 
-public String SentMessage(String choice) {
-    switch (choice) {
-        case "1":
-            messageStatus = "Sent";
-            messagesSent++;
-            System.out.println("Message successfully sent.");
-            return "Message successfully sent.";
-
-        case "2":
-            messageStatus = "Disregarded";
-            System.out.println("Press 0 to delete the message.");
-            return "Press 0 to delete the message.";
-        
-        case "3":
-            messageStatus = "Stored";
-            System.out.println("Message successfully stored.");
-            return "Message successfully stored.";
-
-        default:
-            return "Invalid option selected.";
+            default:
+                return "Invalid option selected.";
+        }
     }
-}
 
     public String printMessages() {
         return "Message ID: " + messageID
                 + "\nMessage Hash: " + messageHash
+                + "\nSender: " + sender
                 + "\nRecipient: " + recipient
                 + "\nMessage: " + messageText;
     }
@@ -124,12 +126,25 @@ public String SentMessage(String choice) {
         this.messageStatus = messageStatus;
     }
 
+    public void setMessageID(String messageID) {
+        this.messageID = messageID;
+        this.messageHash = createMessageHash();
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
     public String getMessageID() {
         return messageID;
     }
 
     public int getMessageNumber() {
         return messageNumber;
+    }
+
+    public String getSender() {
+        return sender;
     }
 
     public String getRecipient() {
